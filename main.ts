@@ -1,7 +1,9 @@
 // Leonida Ledger — entry program for gta6-trophy-guide-01 (Node 22, stdlib only).
 //
-// Revision 3: the guide now cites 673 claims (9 guided steps per trophy,
-// 10 on the last thirteen, each with a verification step).
+// Revision 4: content identical to Revision 3 (673 claims, 9 steps per
+// trophy) — this revision polishes the LOOK only: a Vice City sunset hero,
+// stronger type hierarchy, refined cards, distinct grade badges and
+// circled step numbers. No trophy, step, count or source was touched.
 // This program guards that depth before anything is copied: every trophy
 // must carry a name, a guide, at least 9 steps, named sources and a
 // roadmap stage, and the total cited claims must reach 673. The dossier
@@ -22,7 +24,10 @@
 //
 // Run it outside the grader with MAKEFUN_OUTPUT_DIR standing in for
 // /output, e.g. `mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts`.
-// It is deterministic: two runs write the same bytes.
+// It is deterministic: two runs write the same bytes. Revision 4 changed
+// only the visual design (style.css and the hero markup in index.html);
+// the dossier bytes move only because the CSS and markup moved, never
+// because a claim, step or source changed.
 
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
