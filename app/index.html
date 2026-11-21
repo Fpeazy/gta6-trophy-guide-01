@@ -1,25 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GTA VI trophy checklist</title>
+<title>Leonida Ledger — GTA VI Trophy Guide &amp; Tracker</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <h1>GTA VI trophy checklist</h1>
-  <p id="progress">0 of 55 earned</p>
+<header class="top">
+  <div class="brand">
+    <h1>LEONIDA LEDGER</h1>
+    <p class="sub">Grand Theft Auto VI — Trophy Guide &amp; Tracker · PlayStation 5 · Unofficial fan guide</p>
+  </div>
+  <div class="stats" id="stats">
+    <div class="stat"><span class="num" id="statEarned">0</span><span class="lbl">of 55 earned</span></div>
+    <div class="stat"><span class="num" id="statClaims">330</span><span class="lbl">claims cited</span></div>
+    <div class="stat"><span class="num" id="statMiss">6</span><span class="lbl">missable flagged</span></div>
+    <div class="stat"><span class="num" id="statHidden">28</span><span class="lbl">hidden on PS5</span></div>
+  </div>
+  <div class="progress"><div class="bar" id="progressBar" style="width:0%"></div></div>
 </header>
-<div class="controls">
-  <label>Grade <select id="grade"><option value="all">All</option><option value="platinum">Platinum</option><option value="gold">Gold</option><option value="silver">Silver</option><option value="bronze">Bronze</option></select></label>
-  <button id="export" type="button">Export progress</button>
-  <label class="import">Import progress <input id="import" type="file" accept="application/json"></label>
-</div>
-<table>
-  <thead><tr><th>Earned</th><th>Trophy</th><th>Grade</th><th>How to get it</th></tr></thead>
-  <tbody id="rows"></tbody>
-</table>
-<script type="module" src="app.js"></script>
+
+<nav class="controls" id="controls">
+  <input id="search" type="search" placeholder="Search a trophy, mission or place…" aria-label="Search trophies">
+  <div class="filters" id="filters">
+    <button data-filter="all" class="on">All 55</button>
+    <button data-filter="story">Story</button>
+    <button data-filter="missable">Missable</button>
+    <button data-filter="collectible">Collectibles</button>
+    <button data-filter="activity">Activities</button>
+    <button data-filter="online">Online</button>
+    <button data-filter="earned">Earned</button>
+    <button data-filter="todo">To do</button>
+  </div>
+  <div class="tools">
+    <label class="toggle"><input type="checkbox" id="spoilerToggle"> <span>Spoiler-safe: hide story trophies until earned</span></label>
+    <button id="exportBtn" type="button">Export progress</button>
+    <button id="importBtn" type="button">Import progress</button>
+    <input id="importFile" type="file" accept="application/json,.json" hidden>
+  </div>
+</nav>
+
+<main>
+  <section class="detail" id="detail" hidden>
+    <button id="detailClose" type="button" aria-label="Close guide">×</button>
+    <div id="detailBody"></div>
+  </section>
+
+  <section class="listwrap" id="listwrap">
+    <h2 id="listTitle">All trophies <span id="listCount"></span></h2>
+    <ul class="list" id="list"></ul>
+    <p class="empty" id="emptyNote" hidden>No trophies match this filter. The official list has no online trophies, so the Online filter is empty by design.</p>
+  </section>
+
+  <section class="roadmap" id="roadmap">
+    <h2>Roadmap to the Platinum</h2>
+    <p class="note">Built from the official descriptions: story chapters and missions first, then contacts and strangers, then the counted grinds, then activities and combat, then economy and cleanup. One stage at a time — the platinum lands with the last trophy.</p>
+    <ol class="stages" id="stages"></ol>
+  </section>
+
+  <section class="sources" id="sources">
+    <h2>Sources — every claim cited</h2>
+    <p><strong>330 claims cited</strong> across the 55 trophies: each trophy's official name, description and grade (3 claims) plus its 3 guided steps — every step cites its sources below. No guide text is copied from any source; the guides are written for this entry in its own words.</p>
+    <ul>
+      <li><strong>PlayStation official trophy list</strong> — every trophy's name, description and grade, as PlayStation publishes them.</li>
+      <li><strong>PSNProfiles</strong> — trophy guide: the counts PlayStation tracks (42 Shooting Range challenges, 250 stunts, 100 WAiNK locations, 52 areas, 9 gangs, 8 garages, 10 Scooter Bros vehicles, $250,000 laundering, $100,000 spending, 500 tracked choices).</li>
+      <li><strong>Exophase</strong> — trophy guide: the same official list and counts, agreeing with PSNProfiles on every name, description and grade.</li>
+    </ul>
+    <p class="note">Counts that the official descriptions do not state are credited to PSNProfiles and Exophase, never presented as PlayStation's own words. Missable flags are this guide's reading of the official descriptions — a trophy tied to a single story moment or a state that is hard to recreate.</p>
+  </section>
+</main>
+
+<footer>
+  <p>Unofficial fan guide. Not affiliated with Rockstar Games, Take-Two Interactive or PlayStation. No Rockstar logo, artwork, box art or game screenshots are used. Trophy names and descriptions are shown as PlayStation publishes them.</p>
+</footer>
+<script src="app.js"></script>
 </body>
 </html>
