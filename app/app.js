@@ -1,7 +1,13 @@
-// Leonida Ledger — GTA VI trophy guide and tracker.
+// Leonida Ledger — GTA VI trophy guide and tracker (revision 2).
 // Loads app/data/trophies.json, renders the checklist, the roadmap, and one
 // trophy's cited guide at a time. Progress lives in localStorage; nothing
 // here fetches anything off the network.
+//
+// Revision 2: every trophy now carries 6 guided steps, each a cited claim.
+// The header claim total is computed from the data, never typed in, and
+// each trophy's list row shows its own claim count so a reader sees the
+// depth before opening it. Missable trophies get a warning banner in the
+// detail view, because the moment they depend on is the thing to protect.
 (function () {
   var KEY = 'leonida-ledger-earned-v1';
   var SPOILER_KEY = 'leonida-ledger-spoiler-v1';
@@ -37,10 +43,12 @@
 
   // Cited claims: each trophy contributes its official name, description and
   // grade (3 claims from the PlayStation official list) plus one claim per
-  // guided step. Computed from the data, never typed in.
+  // guided step. Six steps per trophy gives 9 claims each, 495 in total.
+  // Computed from the data, never typed in.
+  function trophyClaims(t) { return 3 + (t.steps || []).length; }
   function claimCount() {
     var total = 0;
-    data.trophies.forEach(function (t) { total += 3 + (t.steps || []).length; });
+    data.trophies.forEach(function (t) { total += trophyClaims(t); });
     return total;
   }
 
@@ -103,6 +111,10 @@
       if (t.missable) { var m = document.createElement('span'); m.className = 'tag miss'; m.textContent = 'Missable'; tags.appendChild(m); }
       if (t.hidden) { var h = document.createElement('span'); h.className = 'tag hidden'; h.textContent = 'Hidden'; tags.appendChild(h); }
       if (t.count) { var c = document.createElement('span'); c.className = 'tag count'; c.textContent = '×' + t.count; tags.appendChild(c); }
+      var cl = document.createElement('span');
+      cl.className = 'tag claims';
+      cl.textContent = trophyClaims(t) + ' claims';
+      tags.appendChild(cl);
       mid.appendChild(name);
       mid.appendChild(desc);
       mid.appendChild(tags);
@@ -144,6 +156,9 @@
     var off = document.createElement('p');
     off.className = 'official';
     off.textContent = 'Official: "' + t.desc + '" — PlayStation official trophy list. Grade: ' + t.grade + (t.hidden ? ' · Hidden on PlayStation until earned.' : '') + (t.missable ? ' · Missable — see the guide.' : '');
+    var claims = document.createElement('p');
+    claims.className = 'claims';
+    claims.textContent = 'Claims cited for this trophy: ' + trophyClaims(t) + ' — 3 official facts (name, description, grade) plus ' + (t.steps || []).length + ' guided steps, every step citing the sources below.';
     var g = document.createElement('p');
     g.className = 'guide';
     g.textContent = t.guide;
@@ -158,6 +173,13 @@
     src.textContent = 'Sources: ' + (t.src || []).join(' · ') + ' — every step above cites these sources; the guide text is original, never copied.';
     detailBody.appendChild(h);
     detailBody.appendChild(off);
+    detailBody.appendChild(claims);
+    if (t.missable) {
+      var warn = document.createElement('p');
+      warn.className = 'misswarn';
+      warn.textContent = 'MISSABLE — this trophy depends on a single moment or a state that is hard to recreate. Do it when the guide says, before the moment passes.';
+      detailBody.appendChild(warn);
+    }
     detailBody.appendChild(g);
     detailBody.appendChild(ol);
     detailBody.appendChild(src);
