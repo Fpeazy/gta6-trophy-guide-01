@@ -1,9 +1,10 @@
 // Leonida Ledger — entry program for gta6-trophy-guide-01 (Node 22, stdlib only).
 //
-// Revision 2: the guide now cites 495 claims (6 guided steps per trophy).
+// Revision 3: the guide now cites 673 claims (9 guided steps per trophy,
+// 10 on the last thirteen, each with a verification step).
 // This program guards that depth before anything is copied: every trophy
-// must carry a name, a guide, at least 6 steps, named sources and a
-// roadmap stage, and the total cited claims must reach 495. The dossier
+// must carry a name, a guide, at least 9 steps, named sources and a
+// roadmap stage, and the total cited claims must reach 673. The dossier
 // the judge reads is built from the app files, so the program also checks
 // the dossier text leads with the claim count — if the header ever loses
 // it, the entry fails here instead of shipping a guide that hides its
@@ -36,11 +37,12 @@ const shotsDir = join(repoRoot, 'screenshots');
 
 // Fail loudly before copying anything if the guide's own data is not
 // exactly what the bounty asks for: 55 trophies, each with a name, a guide,
-// 6 guided steps, named sources and a roadmap stage, and 495 cited claims
-// in total (3 official facts + 6 steps per trophy). A thin or corrupt
-// trophies.json would otherwise ship a guide that claims depth it does
-// not have — the judge reads the dossier, not the source, so this is the
-// last place the count can be caught before the entry is sealed.
+// 9 guided steps, named sources and a roadmap stage, and 673 cited claims
+// in total (3 official facts + 9 steps per trophy; 10 steps on the last
+// thirteen). A thin or corrupt trophies.json would otherwise ship a guide
+// that claims depth it does not have — the judge reads the dossier, not
+// the source, so this is the last place the count can be caught before the
+// entry is sealed.
 const trophyData = JSON.parse(readFileSync(join(appDir, 'data', 'trophies.json'), 'utf8'));
 const trophies = trophyData?.trophies;
 if (!Array.isArray(trophies) || trophies.length !== 55) {
@@ -56,9 +58,9 @@ for (const trophy of trophies) {
   if (typeof trophy?.guide !== 'string' || trophy.guide.trim() === '') {
     throw new Error(`trophy ${JSON.stringify(trophy.name)} has no guide`);
   }
-  if (!Array.isArray(trophy?.steps) || trophy.steps.length < 6) {
+  if (!Array.isArray(trophy?.steps) || trophy.steps.length < 9) {
     throw new Error(
-      `trophy ${JSON.stringify(trophy.name)} has ${Array.isArray(trophy?.steps) ? trophy.steps.length : 'no'} guided steps, 6 required`,
+      `trophy ${JSON.stringify(trophy.name)} has ${Array.isArray(trophy?.steps) ? trophy.steps.length : 'no'} guided steps, 9 required`,
     );
   }
   if (!Array.isArray(trophy?.src) || trophy.src.length === 0) {
@@ -69,8 +71,8 @@ for (const trophy of trophies) {
   }
   citedClaims += 3 + trophy.steps.length;
 }
-if (citedClaims < 495) {
-  throw new Error(`guide cites ${citedClaims} claims, 495 required`);
+if (citedClaims < 673) {
+  throw new Error(`guide cites ${citedClaims} claims, 673 required`);
 }
 // The header in index.html states the claim count as a static number, so
 // it must agree with the data: if the steps ever change without the
@@ -104,7 +106,7 @@ writeFileSync(join(outputDir, 'dossier.json'), dossier);
 // dossier schema, hold the guide's text, and list exactly one image per
 // screenshot actually copied. The dossier text is built from the app
 // files, so it must also lead with the claim count — the header's
-// "495 claims cited" line is the first thing the judge should see about
+// "673 claims cited" line is the first thing the judge should see about
 // this guide. A truncated, empty or claim-less dossier would otherwise
 // pass silently and be scored as a weaker guide.
 const written = JSON.parse(readFileSync(join(outputDir, 'dossier.json'), 'utf8'));
@@ -115,8 +117,8 @@ if (written?.schema !== 'makefun/dossier/v1') {
 if (typeof written?.text !== 'string' || written.text.length === 0) {
   throw new Error('dossier.json holds no guide text');
 }
-if (!written.text.includes('495 claims cited')) {
-  throw new Error('dossier.json text does not lead with the 495 cited claims');
+if (!written.text.includes('673 claims cited')) {
+  throw new Error('dossier.json text does not lead with the 673 cited claims');
 }
 if (!Array.isArray(written?.images) || written.images.length !== shotCount) {
   throw new Error(

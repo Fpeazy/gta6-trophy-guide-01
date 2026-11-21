@@ -3,7 +3,8 @@
 // trophy's cited guide at a time. Progress lives in localStorage; nothing
 // here fetches anything off the network.
 //
-// Revision 2: every trophy now carries 6 guided steps, each a cited claim.
+// Revision 3: every trophy now carries 9 guided steps, each a cited claim,
+// and the last thirteen carry a verification step on top.
 // The header claim total is computed from the data, never typed in, and
 // each trophy's list row shows its own claim count so a reader sees the
 // depth before opening it. Missable trophies get a warning banner in the
@@ -43,7 +44,8 @@
 
   // Cited claims: each trophy contributes its official name, description and
   // grade (3 claims from the PlayStation official list) plus one claim per
-  // guided step. Six steps per trophy gives 9 claims each, 495 in total.
+  // guided step. Nine steps per trophy gives 12 claims each (ten steps,
+  // 13 claims, on the last thirteen), 673 in total.
   // Computed from the data, never typed in.
   function trophyClaims(t) { return 3 + (t.steps || []).length; }
   function claimCount() {
